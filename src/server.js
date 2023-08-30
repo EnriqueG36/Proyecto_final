@@ -20,11 +20,16 @@ const swaggerUiExpress = require('swagger-ui-express')
 //Error handler
 const { errorHandler } = require('./middlewares/error.middleware.js')
 
+//dotenv
+require('dotenv').config()
+
 //logger
 const { logger } = require('./config/logger.js')							//logger y loggerMiddleware
 //Puerto
 const { PORT, MODO } = require('./config/config.js')				//El puerto viene desde una variable de entorno en el archivo config.js
 const { addLogger } = require('./middlewares/logger.middleware.js')
+
+
 
 
 //const initPassportGithub = require('./config/passport.config.js')
@@ -50,7 +55,7 @@ app.use(express.static(__dirname+'/public'))
 app.use(addLogger)
 app.use(session({
 	store: new MongoStore({		//Si da problemas consultar 00:39
-		mongoUrl: "mongodb+srv://enrique:dbmongo@clustercoder.ijswitn.mongodb.net/ecommerce?retryWrites=true&w=majority",
+		mongoUrl: process.env.MONGO_CONNECTION_STRING,
 		mongoOptions: {
 		useNewUrlParser: true,
 		useUnifiedTopology: true
