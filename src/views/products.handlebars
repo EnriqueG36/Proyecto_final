@@ -1,0 +1,45 @@
+<h1>Plantilla de productos</h1>
+<h3>Bienvenido <FONT COLOR ="blue">{{userFirst_name}} {{userLast_name}}</FONT>, carrito: <FONT COLOR="red">{{user_cart}}</FONT> Rol:<FONT COLOR="lime"> {{role}}</FONT></h3>
+
+<div>
+    {{#each productsList}}
+        <li>
+            <strong>Title: </strong>{{this.title}} <br>
+            <strong>Description: </strong>{{this.description}} <br>
+            <strong>Code: </strong>{{this.code}} <br>
+            <strong>Price: </strong>{{this.price}} <br>
+            <strong>Status: </strong>{{this.status}} <br>
+            <strong>Stock: </strong>{{this.stock}} <br>
+            <strong>Category: </strong>{{this.category}} <br>
+            <form action="/api/carts/{{../user_cart}}/product/{{this.id}}" method="post">
+                <input type="submit" value="Agregar al carrito">
+            </form>
+            
+            <br>
+        </li>
+    {{/each}}
+
+</div>
+
+<center>
+    {{#if hasPrevPage}}
+        <a href="/products?limit={{productLimit}}&&page={{prevPage}}"><button>Pagina Anterior</button></a>
+    {{/if}}
+
+      {{#if hasNextPage}}
+        <a href="/products?limit={{productLimit}}&&page={{nextPage}}"><button>Pagina Siguiente</button></a>
+    {{/if}}
+</center>
+
+<form action="/api/carts/{{user_cart}}/purchase" method="POST">
+                <input type="submit" value="Realizar compra">
+            </form>
+
+<form action="/api/session/{{uid}}/documents" method="POST" enctype="multipart/form-data">
+                <input type="file" name='documentos'>
+                <button type="submit">Subir documento</button>
+            </form>
+
+<form action="/api/session/logout" method="GET">
+                <input type="submit" value="Logout">
+            </form>

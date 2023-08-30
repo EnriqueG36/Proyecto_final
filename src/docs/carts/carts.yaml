@@ -1,0 +1,195 @@
+paths:
+  /api/carts/:
+    post:
+      summary: Crea un nuevo carrito
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Carrito creado con exito
+        "500":
+          description: Error interno del server
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: Agrega un producto a un carrito
+      tags: 
+        - Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: ID del carrito al que será agregado el producto
+        schema:
+          $type: String
+      - name: pid
+        in: path
+        required: true
+        description: ID del producto a ser añadido
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: El producto fué agregado al carrito
+        "500":
+          description: Error, comunmente el id de carrito o el id de producto son incorrectos o no se encuentran en la DB
+  /api/carts/{cid}/products/{pid}:
+    delete:
+      summary: Elimina el producto del carrito
+      tags: 
+        - Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: id del carrito del que será eliminado el producto
+        schema:
+          $type: String
+      - name: pid
+        in: path
+        required: true
+        description: id del producto a ser eliminado del carrito
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: El producto fué eliminado del carrito
+        "500":
+          description: Error, comunmente el id de carrito o el id de producto son incorrectos, o el carrito no contiene dicho producto
+    put:
+      summary: Actualiza la cantidad de unidades de un producto existentes en un carrito
+      tags: 
+        - Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: id del carrito
+        schema:
+          $type: String
+      - name: pid
+        in: path
+        required: true
+        description: id del producto a actualizar cantidad
+        schema:
+          $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/productQuantity'
+      responses:
+        "200":
+          description: La cantidad de unidades del producto fue actualizada
+        "500":
+          description: Error, comunmente el id de carrito o el id de producto son incorrectos
+  /api/carts/{cid}:
+    get: 
+      summary: Busca un carrito por su ID y lista los productos que contiene
+      tags:
+        - Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: El id del carrito a buscar
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: Muestra el carrito y el contenido de su arreglo products
+        "500":
+          description: Error, el id de producto introducido puede ser incorrecto o el carrito no se encuentra más en la colección      
+    put: 
+      summary: Actualiza la propiedad products de un carrito, con un arreglo de productos
+      tags:
+        - Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: El id del carrito
+        schema:
+          $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/products' 
+      responses:
+        "200":
+          description: El arreglo products en el carrito, fue actualizado
+        "500":
+          description: Error, el id de carrito no se encuentra o el req.body es incorrecto
+    delete: 
+      summary: Elimina todos los productos en un carrito
+      tags:
+        - Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: El id del carrito
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: Se eliminó el contenido del arreglo products en el carrito
+        "500":
+          description: Error, el id de carrito es incorrecto o no se encuentra más en la DB
+  /api/carts/{cid}/purchase/:
+    post:    
+      summary: Realiza la compra de los productos en el carrito y genera el ticket, si un producto no cuenta con suficiente stock se excluye pero permanece en el carrito, los productos comprados soneliminados del carrito
+      tags:
+        - Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: El id del carrito
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: Compra realizada con exito
+        "500":
+          description: Error  
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Id autogenerado por mongo
+        products:
+          type: array
+          description: Arreglo que contiene los productos añadidos al carrito
+          items:
+            productId:
+              type: string
+              description: El ID de un objeto de producto
+            quantity:
+              type: number
+              description: La cantidad de unidades añadidas de este producto en el carrito
+  requestBodies:
+    products:
+      type: array
+      description: Arreglo que contiene los objetos producto añadidos al carrito
+      items:
+        productId:
+          type: string
+          description: El ID de un objeto de producto
+        quantity:
+          type: number
+          description: La cantidad de unidades añadidas de este producto en el carrito  
+      example:
+        productId: ObjectId('lkadsfkhadf97sd6fouh946rtp')
+        quantity: 10        
+    productQuantity:
+      type: number
+      description: Cantidad de unidades a actualizar, deberá ser mayor que 0
+      example:
+        productQuantity: 7   

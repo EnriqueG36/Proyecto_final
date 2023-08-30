@@ -1,0 +1,33 @@
+<h1>Chat!!</h1>
+
+<div>
+    <h2>Escribe tu mensaje aquí"</h2>
+	<form action="/chat" method="get" onsubmit="return addNewMessage(this)">
+        <label for="user">User:</label>
+        <input type="text" id="userForm" name="Title"><br> 
+        <label for="message">Message:</label>
+        <input type="text" id="messageForm" name=""><br>
+            
+        
+        <input type="submit" value="Enviar mensaje">
+    </form>
+	
+</div>
+<div>
+    <ul>
+
+
+    </ul>
+</div>
+
+
+
+<script src="/socket.io/socket.io.js"></script>             <!-- Este script está dentro de la carpeta socket.io que se genera al instalar socket-->
+<script src="/js/chat.js"></script>       <!-- Este es nuestro script con la logica del cliente-->
+<script>
+    console.log("Desde la platilla")
+</script>
+
+<h2>Chat Log</h2>                       <!-- Aquí se deben de mostrar los mensajes del chat-->
+
+    <div id="chatLog"></div>

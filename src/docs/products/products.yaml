@@ -1,0 +1,157 @@
+paths:
+  /api/products/:
+    get:
+      summary: Obtiene todos los productos en la colección
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Muestra todos los productos existentes
+        "500":
+          description: Error interno del server
+          content:
+            application/json:
+              schema:
+              type: array
+              items:
+                $ref: '#components/schemas/Product'
+    post:
+      summary: Agrega un nuevo producto a la colección
+      tags: 
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/product'
+      responses:
+        "200":
+          description: El producto fué agregado a la colección
+        "500":
+          description: Error, comunmente alguna de las entradas en el req.body no contiene el tipo de dato correcto
+  /api/products/{pid}:
+    get: 
+      summary: Obtiene el producto especificado por su id
+      tags:
+        - Products
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: El id del producto a buscar
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: Muestra los datos del producto solicitado
+        "500":
+          description: Error, el id de producto introducido puede ser incorrecto o el producto no se encuentra más en la colección
+    delete: 
+      summary: Elimina de la colección el producto especificado por su id
+      tags:
+        - Products
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: El id del producto a eliminar
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: Producto eliminado con exito
+        "500":
+          description: Error, el id de producto introducido puede ser incorrecto o el producto no se encuentra más en la colección       
+    put: 
+      summary: Mediante el id y req.body, actualiza los datos del producto especificado 
+      tags:
+        - Products
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: El id del producto a buscaractualizar
+        schema:
+          $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/product' 
+      responses:
+        "200":
+          description: Los datos del producto se actualizaron con exito
+        "500":
+          description: Error, el id de producto introducido puede ser incorrecto o el producto no se encuentra más en la colección, o el req.body no es correcto/hacen falta atributos       
+          
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Id autogenerado por mongo
+        title:
+          type: string
+          description: Nombre del producto
+        code:
+          type: number
+          description: Codigo unico de producto
+        price:
+          type: number
+          description: Precio del producto
+        status:
+          type: boolean
+          description: Estatus del producto
+        stock:
+          type: number
+          description: Cantidad disponible del producto
+        category:
+          type: string
+          description: Categoria a la que pertenece el producto
+        thumbnail:
+          type: string
+          description: URL de la imagen del producto
+        owner:
+          type: string
+          description: id del usuario propietario de este producto
+  requestBodies:
+    product:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Nombre del producto
+        code:
+          type: number
+          description: Codigo unico de producto
+        price:
+          type: number
+          description: Precio del producto
+        status:
+          type: boolean
+          description: Estatus del producto
+        stock:
+          type: number
+          description: Cantidad disponible del producto
+        category:
+          type: string
+          description: Categoria a la que pertenece el producto
+        thumbnail:
+          type: string
+          description: URL de la imagen del producto    
+      example:
+        _id: ObjectId('wasdabcde.xyz')
+        title: Teclado
+        code: 007
+        price: 1440
+        status: true
+        stock: 999
+        category: Computacion
+        thumbnail: http://imagenteclado
+        owner: usuario10 
+  
+          
