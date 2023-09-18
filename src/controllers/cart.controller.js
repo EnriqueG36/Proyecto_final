@@ -2,6 +2,9 @@
 const { logger } = require("../config/logger");
 const {cartService, ticketService, productService} = require("../repositories");        //Imporamos los service de carros, productos y tickets
 
+//Funcion para envio de email
+const { sendEmail } = require("../utils/sendMail");         
+
 
 //const CartManagerMongo = require("../daos/mongo/cart.mongo");
 //const cartManager = new CartManagerMongo()
@@ -140,14 +143,14 @@ purchase = async (req, res)=>{
         //console.log("Dentro de la función purchase")
 
         const {cid} = req.params                    //El cid lo obtenemos de params, vamos a trabajar sobre el carrito asignado al usuario que haga la compra
-        const email = req.session.user.email        //Obtenemos el email del usuario de los datos de la sesion, se usará al momento de generarl el ticket
+        const email = req.session.user.email        //Obtenemos el email del usuario de los datos de la sesion, se usará al momento de generar el ticket
 
         const theCart = await cartService.showCartProducts(cid)    //Obtenemos los datos del carrito
         
         const productsInCart = theCart.products                     //Se extrae solo el arreglo de productos en el carro para trabajar con el
 
-        if (productsInCart.length == 0) res.status(400).send({Status: "Compra no realizada", message: "El carrito se encuentra vacio"})         //Respondemos ésto si el carrito se encuentra vacío
-        
+        if (productsInCart.length == 0) { return res.status(400).send({Status: "Compra no realizada", message: "El carrito se encuentra vacio"}) }      //Respondemos ésto si el carrito se encuentra vacío
+       
         //validación del ID del carrito
         if(!productsInCart) { return res.status(400).send({status: "Error", message: "No se encuentra el carrito"})} //Validar si existe el carro en la base de datos
 
@@ -210,9 +213,15 @@ purchase = async (req, res)=>{
         //actualizamos el carrito, quedandose solo con los productos que no cumplieron con el stock requerido
         cartService.updateCartProductsArray(cid, productsWithoutStock)
      
+        //Envío de ticket por email
+        const subject = "Confirmación de compra, ecommerce"
+        const html = `Gracias por comprar: ${generatedTicket}, ${productsWithStock}`
+
+
+        sendEmail(email, subject, html)
 
         //Regresamos toda la informacion de la operación, el ticket generado, los productos que se compraron, los productos que no tenían stock
-        res.status(200).send({status: "success", message: "Compra realizada", ticket: generatedTicket, productosComprados: productsWithStock, productosNoComprados: productsWithoutStock})
+        return res.status(200).send({status: "success", message: "Compra realizada", ticket: generatedTicket, productosComprados: productsWithStock, productosNoComprados: productsWithoutStock})
 
     }catch(error){
         console.log(error)
