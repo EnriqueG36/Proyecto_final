@@ -145,6 +145,8 @@ purchase = async (req, res)=>{
         const theCart = await cartService.showCartProducts(cid)    //Obtenemos los datos del carrito
         
         const productsInCart = theCart.products                     //Se extrae solo el arreglo de productos en el carro para trabajar con el
+
+        if (productsInCart.length == 0) res.status(400).send({Status: "Compra no realizada", message: "El carrito se encuentra vacio"})         //Respondemos ésto si el carrito se encuentra vacío
         
         //validación del ID del carrito
         if(!productsInCart) { return res.status(400).send({status: "Error", message: "No se encuentra el carrito"})} //Validar si existe el carro en la base de datos
