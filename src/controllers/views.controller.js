@@ -18,7 +18,7 @@ getViewAllProducts = async (req, res) => {
         const {query=null} = req.query
         const {sort} = req.query
     
-        const products = await productManager.getProducts(limit, page, query, sort)
+        const products = await productManager.get(limit, page, query, sort)
         
         const productsList = products.docs
         const hasPrevPage = products.hasPrevPage

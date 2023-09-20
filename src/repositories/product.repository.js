@@ -6,23 +6,23 @@ class ProductRepository {
     }
 
     getProducts = (limit, page, query, sort)=> {
-        return this.dao.getProducts(limit, page, query, sort)
+        return this.dao.get(limit, page, query, sort)
     }
 
     addProduct = (newProduct)=>{
-        return this.dao.addProduct(newProduct)
+        return this.dao.add(newProduct)
     }
     
     getProductById = (pid)=> {
-        return this.dao.getProductById(pid)
+        return this.dao.getById(pid)
     }
 
     deleteProductById = (pid)=>{
-        return this.dao.deleteProductById(pid)
+        return this.dao.deleteById(pid)
     }
 
     updateProductById = (pid, productToUpdate)=>{
-        return this.dao.updateProductById(pid, productToUpdate)
+        return this.dao.updateById(pid, productToUpdate)
     }
     
 }

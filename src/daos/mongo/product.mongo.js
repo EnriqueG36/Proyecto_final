@@ -7,7 +7,7 @@ const productModel = require('../model/product.model.js')        //Importamos el
 class ProductManagerMongo {
 
     //Retorna todos los documentos de productos
-    async getProducts(limit, page, query, sortOrder){
+    async get(limit, page, query, sortOrder){
         try{
             //return await productModel.find()
             logger.info(`valores de paginacion, vista products => limit: ${limit}, page: ${page}, query: ${query}, sortOrder: ${sortOrder}`)
@@ -25,7 +25,7 @@ class ProductManagerMongo {
     }    
 
     //Agrega un nuevo producto a la coleccion
-    async addProduct(newProduct){
+    async add(newProduct){
         try {
             
         return await productModel.create(newProduct)
@@ -35,7 +35,7 @@ class ProductManagerMongo {
     }
 
     //Busca un producto por su id
-    async getProductById(pid){
+    async getById(pid){
         try {
         return await productModel.findOne({_id: pid})
         }catch(error){
@@ -45,7 +45,7 @@ class ProductManagerMongo {
     }
 
      //Elimina un producto por su id
-     async deleteProductById(pid){
+     async deleteById(pid){
         try {
         return await productModel.deleteOne({_id: pid})
         }catch(error){
@@ -55,7 +55,7 @@ class ProductManagerMongo {
     }
 
      //Actualiza un producto por su id
-     async updateProductById(pid, newProduct){
+     async updateById(pid, newProduct){
         try {
         return await productModel.updateOne({_id: pid}, newProduct)
         }catch(error){
