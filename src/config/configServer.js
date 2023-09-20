@@ -1,7 +1,7 @@
 //Configuracion para la conexion de nuestra base de datos en mongoAtlas
 require('dotenv').config()
 const {connect} = require('mongoose')
-const { logger } = require('./logger')
+const { logger } = require('./logger.js')
 
 
 
@@ -11,6 +11,6 @@ const url =  process.env.MONGO_CONNECTION_STRING                                
 module.exports = {
     connectDB: () => { 
         connect(url) 
-        logger.info('Base de datos conectada') 
+        console.log('Base de datos conectada') 
         
     }}
