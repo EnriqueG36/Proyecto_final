@@ -27,16 +27,16 @@ router.get('/mockingproducts', (req, res) => {
 //Obtiene todos los productos en la colección
 router.get('/', productController.getProducts)
 
-//Añade un nuevo producto a la coleccion
+//Añade un nuevo producto a la coleccion*
 router.post('/', auth, productController.postProduct)
 
 //Obtiene un producto por su id
 router.get('/:pid', productController.getProductById)
 
-//Elimina un producto por su id
+//Elimina un producto por su id*
 router.delete('/:pid', auth, productController.deleteProductById)
 
-//Actualiza un producto por su id
+//Actualiza un producto por su id*
 router.put('/:pid', auth, productController.putProductbyId)
 
 

@@ -13,7 +13,26 @@ function auth(req, res, next) {
 	next()		//los middlewares necesitan llevar next()
 }
 
-module.exports =  { auth }                                      //Importamos la funcion auth
+//module.exports =  { auth }                                      //Importamos la funcion auth
+
+
+function authMiddleware(roles)  {
+	return (req, res, next) => {
+		roles.forEach(element => {
+			if( req.session.user.role == element) {
+				//console.log(element)
+				//console.log(req.session.user.role)
+				return next()
+			}
+			
+		})
+		return res.status(403).send({message: "No tiene privilegios"})
+	}
+}
+
+module.exports =  { auth, authMiddleware }
+
+
 
 /*
 function auth(req, res, next) {

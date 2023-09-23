@@ -3,6 +3,7 @@
 const { Router } = require('express')
 const router = Router()
 const { auth } = require('../middlewares/authentication.middleware')
+const { authMiddleware } = require('../middlewares/authentication.middleware')
 
 //jwt
 const { authToken } = require('../utils/jwt')
@@ -19,6 +20,8 @@ const cartManager = new CartManager()
 const ViewsController = require('../controllers/views.controller')
 
 
+
+
 const viewsController = new ViewsController()
 
 
@@ -28,8 +31,10 @@ res.render('chat', {})
 
 })
 
+
+
 //Vista que muestra todos los productos disponibles con paginacion
-router.get('/products', viewsController.getViewAllProducts)
+router.get('/products', auth, viewsController.getViewAllProducts)
 
 //Vista que muestra todos los productos en un carrito
 router.get('/carts/:cid', viewsController.getViewCart)
